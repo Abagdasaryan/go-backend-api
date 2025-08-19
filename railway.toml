@@ -3,5 +3,5 @@ builder = "nixpacks"
 
 [deploy]
 startCommand = "go run main.go"
-healthcheckPath = "/api/v1/ready"
+healthcheckPath = "/healthz"
 healthcheckTimeout = 300
