@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+        .htmx-request .htmx-indicator { opacity: 1 }
+        .htmx-request.htmx-indicator { opacity: 1 }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">🚀 Go Backend API</h1>
+            <p class="text-xl text-gray-600">Interactive Testing Dashboard</p>
+        </header>
+
+        <nav class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">🏠 Home</a>
+                <a href="/health" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">💚 Health</a>
+                <a href="/echo" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200">📢 Echo</a>
+                <a href="/data" class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors duration-200">💾 Data</a>
+            </div>
+        </nav>
+
+        <main class="bg-white rounded-lg shadow-lg p-8">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">💾 Data Management</h2>
+                <p class="text-lg text-gray-600 mb-8 text-center">Create, store, and retrieve data using your API endpoints</p>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Create Data Section -->
+                    <div class="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-lg border border-orange-200">
+                        <h3 class="text-xl font-semibold text-orange-800 mb-4">➕ Create New Data</h3>
+                        <form hx-post="/api/v1/data" hx-target="#create-response" hx-indicator=".htmx-indicator" hx-trigger="submit" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Enter name..." 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" required>
+                            </div>
+                            <div>
+                                <label for="value" class="block text-sm font-medium text-gray-700 mb-2">Value</label>
+                                <input type="number" id="value" name="value" placeholder="Enter value..." 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" required>
+                            </div>
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                <textarea id="description" name="description" placeholder="Enter description..." rows="3" 
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"></textarea>
+                            </div>
+                            <button type="submit" class="w-full px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors duration-200 font-semibold">
+                                💾 Create Data
+                            </button>
+                        </form>
+                        <div class="mt-4">
+                            <div class="htmx-indicator text-orange-600 text-center">⏳ Creating data...</div>
+                            <div id="create-response" class="mt-4 p-4 bg-white border border-gray-200 rounded-lg min-h-[100px]">
+                                <p class="text-gray-500 text-center">Fill the form above and submit to create new data</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Retrieve Data Section -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+                        <h3 class="text-xl font-semibold text-blue-800 mb-4">📋 Retrieve All Data</h3>
+                        <p class="text-sm text-blue-600 mb-4">Click the button below to fetch all stored data from the API</p>
+                        <button class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold mb-4" 
+                                hx-get="/api/v1/data" 
+                                hx-target="#retrieve-response" 
+                                hx-indicator=".htmx-indicator">
+                            📥 Fetch All Data
+                        </button>
+                        <div class="htmx-indicator text-blue-600 text-center">⏳ Fetching data...</div>
+                        <div id="retrieve-response" class="mt-4 p-4 bg-white border border-gray-200 rounded-lg min-h-[100px]">
+                            <p class="text-gray-500 text-center">Click the button above to retrieve all stored data</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-green-50 p-6 rounded-lg border border-green-200">
+                    <h3 class="text-lg font-semibold text-green-800 mb-3">💡 How it works</h3>
+                    <ul class="text-sm text-green-700 space-y-1">
+                        <li>• Fill out the form on the left to create new data</li>
+                        <li>• Submit the form to store data via POST /api/v1/data</li>
+                        <li>• Click the button on the right to retrieve all data</li>
+                        <li>• Data is stored in memory and will persist during the session</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-600">
+            <p>Built with ❤️ using Go, Gin, and HTMX</p>
+        </footer>
+    </div>
+</body>
+</html>

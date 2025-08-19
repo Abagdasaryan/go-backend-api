@@ -46,7 +46,36 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(corsMiddleware())
 
-	// Routes
+	// Serve static HTML files
+	r.LoadHTMLGlob("templates/*.html")
+	r.Static("/static", "./static")
+
+	// Frontend routes
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(200, "index.html", gin.H{
+			"title": "Go Backend API - Interactive Dashboard",
+		})
+	})
+
+	r.GET("/health", func(c *gin.Context) {
+		c.HTML(200, "health.html", gin.H{
+			"title": "Health Monitor - Go Backend API",
+		})
+	})
+
+	r.GET("/echo", func(c *gin.Context) {
+		c.HTML(200, "echo.html", gin.H{
+			"title": "Echo Testing - Go Backend API",
+		})
+	})
+
+	r.GET("/data", func(c *gin.Context) {
+		c.HTML(200, "data.html", gin.H{
+			"title": "Data Management - Go Backend API",
+		})
+	})
+
+	// API routes
 	api := r.Group("/api/v1")
 	{
 		api.GET("/health", healthCheck)
@@ -56,22 +85,16 @@ func main() {
 		api.GET("/data", getData)
 	}
 
-	// Root route
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, Response{
-			Message:   "Welcome to Go Backend API",
-			Status:    "success",
-			Timestamp: time.Now(),
-		})
-	})
-
 	// Get port from environment or use default
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	log.Printf("Server starting on port %s", port)
+	log.Printf("🚀 Server starting on port %s", port)
+	log.Printf("🌐 Frontend available at: http://localhost:%s", port)
+	log.Printf("🔗 API endpoints available at: http://localhost:%s/api/v1", port)
+
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
@@ -117,6 +140,12 @@ func welcome(c *gin.Context) {
 				"GET /api/v1/echo/:message - Echo a message",
 				"POST /api/v1/data - Create data",
 				"GET /api/v1/data - Get all data",
+			},
+			"frontend": map[string]string{
+				"home":   "/",
+				"health": "/health",
+				"echo":   "/echo",
+				"data":   "/data",
 			},
 		},
 	})

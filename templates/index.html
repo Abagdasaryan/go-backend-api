@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }}</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+        .htmx-request .htmx-indicator { opacity: 1 }
+        .htmx-request.htmx-indicator { opacity: 1 }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-4">🚀 Go Backend API</h1>
+            <p class="text-xl text-gray-600">Interactive Testing Dashboard</p>
+        </header>
+
+        <nav class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">🏠 Home</a>
+                <a href="/health" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200">💚 Health</a>
+                <a href="/echo" class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200">📢 Echo</a>
+                <a href="/data" class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors duration-200">💾 Data</a>
+            </div>
+        </nav>
+
+        <main class="bg-white rounded-lg shadow-lg p-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Welcome to Your Go Backend API</h2>
+                <p class="text-lg text-gray-600 mb-8">Test all your API endpoints with this beautiful interactive dashboard</p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                        <div class="text-4xl mb-2">🏠</div>
+                        <h3 class="font-semibold text-blue-800 mb-2">Home</h3>
+                        <p class="text-sm text-blue-600">Welcome message and overview</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                        <div class="text-4xl mb-2">💚</div>
+                        <h3 class="font-semibold text-green-800 mb-2">Health</h3>
+                        <p class="text-sm text-green-600">System status and uptime</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                        <div class="text-4xl mb-2">📢</div>
+                        <h3 class="font-semibold text-purple-800 mb-2">Echo</h3>
+                        <p class="text-sm text-purple-600">Test message echoing</p>
+                    </div>
+                    <div class="bg-orange-50 p-6 rounded-lg border border-orange-200">
+                        <div class="text-4xl mb-2">💾</div>
+                        <h3 class="font-semibold text-orange-800 mb-2">Data</h3>
+                        <p class="text-sm text-orange-600">Create and retrieve data</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Quick API Test</h3>
+                    <div class="flex justify-center space-x-4">
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
+                                hx-get="/api/v1/health" 
+                                hx-target="#api-response" 
+                                hx-indicator=".htmx-indicator">
+                            Test Health
+                        </button>
+                        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors" 
+                                hx-get="/api/v1/" 
+                                hx-target="#api-response" 
+                                hx-indicator=".htmx-indicator">
+                            Test API Info
+                        </button>
+                    </div>
+                    <div class="mt-4">
+                        <div class="htmx-indicator text-blue-600">⏳ Loading...</div>
+                        <div id="api-response" class="mt-4 p-4 bg-white border rounded-lg min-h-[100px]">
+                            <p class="text-gray-500 text-center">Click a button above to test the API endpoints</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-600">
+            <p>Built with ❤️ using Go, Gin, and HTMX</p>
+        </footer>
+    </div>
+</body>
+</html>
