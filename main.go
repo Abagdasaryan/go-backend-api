@@ -28,6 +28,9 @@ type HealthResponse struct {
 var startTime = time.Now()
 
 func main() {
+	log.Println("🚀 Starting Go Backend API...")
+	log.Println("🔧 Environment check...")
+	
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using system environment variables")
@@ -36,6 +39,9 @@ func main() {
 	// Set Gin mode based on environment
 	if os.Getenv("GIN_MODE") == "release" {
 		gin.SetMode(gin.ReleaseMode)
+		log.Println("✅ Running in RELEASE mode")
+	} else {
+		log.Println("⚠️  Running in DEBUG mode")
 	}
 
 	// Create router
@@ -97,10 +103,10 @@ func main() {
 	log.Printf("🔗 API endpoints available at: http://0.0.0.0:%s/api/v1", port)
 	log.Printf("🔧 Environment: PORT=%s, GIN_MODE=%s", port, os.Getenv("GIN_MODE"))
 	log.Printf("⏳ Waiting 2 seconds for service to fully initialize...")
-	
+
 	// Give the service a moment to fully initialize
 	time.Sleep(2 * time.Second)
-	
+
 	log.Printf("✅ Service ready! Starting HTTP server...")
 
 	if err := r.Run("0.0.0.0:" + port); err != nil {
