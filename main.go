@@ -79,6 +79,7 @@ func main() {
 	api := r.Group("/api/v1")
 	{
 		api.GET("/health", healthCheck)
+		api.GET("/ready", readyCheck) // Add readiness check
 		api.GET("/", welcome)
 		api.GET("/echo/:message", echoMessage)
 		api.POST("/data", createData)
@@ -95,6 +96,12 @@ func main() {
 	log.Printf("🌐 Frontend available at: http://0.0.0.0:%s", port)
 	log.Printf("🔗 API endpoints available at: http://0.0.0.0:%s/api/v1", port)
 	log.Printf("🔧 Environment: PORT=%s, GIN_MODE=%s", port, os.Getenv("GIN_MODE"))
+	log.Printf("⏳ Waiting 2 seconds for service to fully initialize...")
+	
+	// Give the service a moment to fully initialize
+	time.Sleep(2 * time.Second)
+	
+	log.Printf("✅ Service ready! Starting HTTP server...")
 
 	if err := r.Run("0.0.0.0:" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
@@ -118,6 +125,14 @@ func corsMiddleware() gin.HandlerFunc {
 }
 
 // Handlers
+func readyCheck(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"status":    "ready",
+		"timestamp": time.Now(),
+		"message":   "Service is ready to accept requests",
+	})
+}
+
 func healthCheck(c *gin.Context) {
 	uptime := time.Since(startTime)
 
