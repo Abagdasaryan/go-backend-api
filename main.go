@@ -92,10 +92,11 @@ func main() {
 	}
 
 	log.Printf("🚀 Server starting on port %s", port)
-	log.Printf("🌐 Frontend available at: http://localhost:%s", port)
-	log.Printf("🔗 API endpoints available at: http://localhost:%s/api/v1", port)
+	log.Printf("🌐 Frontend available at: http://0.0.0.0:%s", port)
+	log.Printf("🔗 API endpoints available at: http://0.0.0.0:%s/api/v1", port)
+	log.Printf("🔧 Environment: PORT=%s, GIN_MODE=%s", port, os.Getenv("GIN_MODE"))
 
-	if err := r.Run(":" + port); err != nil {
+	if err := r.Run("0.0.0.0:" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
 }
