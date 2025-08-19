@@ -50,16 +50,16 @@ func main() {
 	r.LoadHTMLGlob("templates/*.html")
 	r.Static("/static", "./static")
 
-		// Simple health check for Railway (must be first)
+		// Frontend routes (main dashboard)
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"status": "ok", "message": "Go Backend API is running"})
-	})
-	
-	// Frontend routes
-	r.GET("/dashboard", func(c *gin.Context) {
 		c.HTML(200, "index.html", gin.H{
 			"title": "Go Backend API - Interactive Dashboard",
 		})
+	})
+	
+	// Simple health check for Railway
+	r.GET("/healthz", func(c *gin.Context) {
+		c.JSON(200, gin.H{"status": "ok", "message": "Go Backend API is running"})
 	})
 
 	r.GET("/health", func(c *gin.Context) {
@@ -97,7 +97,7 @@ func main() {
 		port = "8080"
 	}
 
-		log.Printf("🚀 Server starting on port %s", port)
+	log.Printf("🚀 Server starting on port %s", port)
 
 	if err := r.Run("0.0.0.0:" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
